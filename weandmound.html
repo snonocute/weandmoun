@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wegovy® vs Mounjaro® Weight Loss Efficacy & Cost Comparison</title>
+  <!-- นำเข้า Tailwind CSS ผ่าน CDN สำหรับดีไซน์ที่หรูหราทันสมัย -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ปรับแต่งปุ่มสไลเดอร์แบบพรีเมียมสีม่วงและเขียวผสมผสาน */
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4F46E5;
+      cursor: pointer;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: background .15s ease-in-out, transform .1s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      background: #4338CA;
+      transform: scale(1.15);
+    }
+    .custom-transition {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 flex flex-col min-h-screen antialiased">
+
+  <!-- ส่วนหัวแอปพลิเคชัน (Header) โทนสีเขียวมรกตและม่วงคราม (Wegovy vs Mounjaro) -->
+  <header class="bg-gradient-to-r from-teal-900 via-slate-900 to-indigo-950 text-white shadow-md border-b border-indigo-700">
+    <div class="max-w-6xl mx-auto px-4 py-6 md:py-8">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mb-2">
+            Clinical Efficacy & Budget Calculator (SafeSlim & Hospital Data)
+          </span>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+            เครื่องมือวิเคราะห์เปรียบเทียบ Wegovy® vs Mounjaro® (Efficacy & Cost)
+          </h1>
+          <p class="text-indigo-200 text-xs md:text-sm mt-1 max-w-2xl">
+            เปรียบเทียบประสิทธิภาพการลดน้ำหนักรายสัปดาห์ โครงสร้างราคายาจริงของโรงพยาบาล เทียบกับราคาอ้างอิงตลาดภายนอก
+          </p>
+        </div>
+        
+        <!-- แถบเลือกสลับหน่วยน้ำหนัก -->
+        <div class="flex bg-slate-800/60 p-1.5 rounded-xl border border-slate-700/50 self-stretch md:self-auto gap-1">
+          <button id="unit-kg-btn" class="flex-1 md:flex-none px-4 py-2 text-xs font-bold rounded-lg transition uppercase bg-indigo-600 text-white shadow-sm">
+            กิโลกรัม
+          </button>
+          <button id="unit-lbs-btn" class="flex-1 md:flex-none px-4 py-2 text-xs font-bold rounded-lg transition uppercase text-slate-300 hover:bg-slate-800/50">
+            ปอนด์
+          </button>
+          <button id="unit-st-btn" class="flex-1 md:flex-none px-4 py-2 text-xs font-bold rounded-lg transition uppercase text-slate-300 hover:bg-slate-800/50">
+            สโตน
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- พื้นที่หลัก (Layout Main Content) -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6 md:py-10 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+    
+    <!-- ฝั่งกำหนดและคำนวณน้ำหนักตัวผู้ใช้ (Sidebar - คอลัมน์ 4/12) -->
+    <section class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 md:p-6 flex flex-col justify-between gap-6">
+      <div class="space-y-6">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+          <!-- ไอคอนเครื่องคิดเลข Calculator SVG -->
+          <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          ข้อมูลส่วนตัวและเป้าหมาย
+        </h2>
+
+        <!-- ช่องกรอกน้ำหนักเริ่มต้นก่อนใช้ยา -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-sm font-semibold text-slate-700">
+              น้ำหนักเริ่มต้นก่อนฉีด (<span class="unit-text">kg</span>)
+            </label>
+            <span id="start-weight-sub" class="text-[11px] text-slate-400 font-medium">~ 14.2 st / 200 lbs</span>
+          </div>
+          <div class="relative">
+            <input 
+              type="number" 
+              step="0.1"
+              id="start-weight-input"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-lg font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+              value="90"
+            />
+            <span class="absolute right-4 top-3.5 text-slate-400 text-sm font-medium uppercase unit-text">kg</span>
+          </div>
+        </div>
+
+        <!-- ช่องเป้าหมายน้ำหนักในฝัน -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="text-sm font-semibold text-slate-700">
+              เป้าหมายน้ำหนักในฝัน (<span class="unit-text">kg</span>)
+            </label>
+            <span id="target-weight-sub" class="text-[11px] text-slate-400 font-medium">~ 11 st / 154 lbs</span>
+          </div>
+          <div class="relative">
+            <input 
+              type="number" 
+              step="0.1"
+              id="target-weight-input"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-lg font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+              value="71"
+            />
+            <span class="absolute right-4 top-3.5 text-slate-400 text-sm font-medium uppercase unit-text">kg</span>
+          </div>
+
+          <!-- การคำนวณและประเมินเปอร์เซ็นต์ที่ต้องลดของเป้าหมายจริง -->
+          <div class="mt-3 p-4 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <div class="flex justify-between items-center text-slate-700 border-b border-slate-200 pb-2 mb-2">
+              <span class="font-medium">น้ำหนักเป้าหมายที่ลดลง:</span>
+              <span id="target-reduction-percent" class="font-black text-indigo-600 text-sm">-21.1%</span>
+            </div>
+            
+            <div class="space-y-1.5 text-[11px] leading-relaxed">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-500">Wegovy (เฉลี่ยสูงสุด 2.4mg):</span>
+                <span id="wegovy-eligibility" class="font-bold text-emerald-600">เป็นไปได้สูง (คุมลด 21.0%)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-500">Mounjaro (เฉลี่ยสูงสุด 15mg):</span>
+                <span id="mounjaro-eligibility" class="font-bold text-indigo-600">เป็นไปได้สูงมาก (คุมลด 22.5%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ปุ่มแนะนำเป้าหมายยอดนิยม -->
+          <div class="grid grid-cols-2 gap-2 mt-3">
+            <button 
+              id="recommend-wegovy-btn"
+              class="text-left p-2 rounded-lg border border-slate-200 hover:border-emerald-300 bg-white hover:bg-emerald-50 text-[10px] font-semibold text-slate-600 hover:text-emerald-800 transition"
+            >
+              🎯 แนะนำตามเป้า Wegovy (-21.0%)
+            </button>
+            <button 
+              id="recommend-mounjaro-btn"
+              class="text-left p-2 rounded-lg border border-slate-200 hover:border-indigo-300 bg-white hover:bg-indigo-50 text-[10px] font-semibold text-slate-600 hover:text-indigo-800 transition"
+            >
+              🎯 แนะนำตามเป้า Mounjaro (-22.5%)
+            </button>
+          </div>
+        </div>
+
+        <!-- เปรียบเทียบข้อมูลยารวมย่อ -->
+        <div class="border-t border-slate-100 pt-4 space-y-3.5">
+          <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+            💡 สรุปความแตกต่างของสองตัวยา
+          </h3>
+          
+          <!-- กล่องเปรียบเทียบกลไก -->
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2.5 rounded-xl border border-emerald-100 bg-emerald-50/30">
+              <span class="block font-bold text-emerald-800 text-[10px] uppercase">Wegovy® (Semaglutide)</span>
+              <span class="font-semibold text-slate-700 block mt-1">Single GLP-1 RA</span>
+              <p class="text-[10px] text-slate-500 mt-0.5 leading-tight">เลียนแบบฮอร์โมนอิ่มชนิดเดี่ยว คุมหิวและลดการเคลื่อนไหวของกระเพาะ</p>
+            </div>
+            
+            <div class="p-2.5 rounded-xl border border-indigo-100 bg-indigo-50/30">
+              <span class="block font-bold text-indigo-800 text-[10px] uppercase">Mounjaro® (Tirzepatide)</span>
+              <span class="font-semibold text-slate-700 block mt-1">Dual GIP & GLP-1 RA</span>
+              <p class="text-[10px] text-slate-500 mt-0.5 leading-tight">เลียนแบบคู่ฮอร์โมนอิ่มสองทาง ช่วยลดความอยากและเร่งสลายพลังงานดีขึ้น</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-5 border-t border-slate-100 text-center">
+        <p class="text-[11px] text-slate-400">
+          ข้อมูลประสิทธิภาพอ้างอิงเฉลี่ยจากระยะการทดลองที่ขนาดยาสูงสุดและดูแลโดยแพทย์ผู้เชี่ยวชาญร่วมกับโปรแกรมเวทเทรนนิ่งและการคุมแคลอรี่ต่ำ
+        </p>
+      </div>
+    </section>
+
+    <!-- หน้าต่างรายงานความคืบหน้า ชาร์ต และคำแนะนำของสองตัวยาควบคู่กัน (คอลัมน์ 8/12) -->
+    <section class="lg:col-span-8 flex flex-col gap-6">
+      
+      <!-- บอร์ดรายงานสรุปความคาดเคลื่อนด้านน้ำหนักสะสมที่จะลดเหลือ -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- แดชบอร์ดผลลัพธ์ Wegovy -->
+        <div class="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5 border-l-4 border-l-emerald-500 relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">ผลจำลองด้วย Wegovy® (2.4mg)</span>
+            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 rounded">มีบริการที่ รพ.</span>
+          </div>
+          <div class="flex items-baseline gap-1 mt-2">
+            <span id="display-wegovy-weight" class="text-3xl font-black text-slate-900">71.0</span>
+            <span class="text-sm font-semibold text-slate-500 uppercase unit-text">kg</span>
+          </div>
+          
+          <div class="flex items-center gap-2 mt-1">
+            <span id="display-wegovy-lost" class="text-sm font-bold text-emerald-600">-19.0 kg (-18.2%)</span>
+            <span class="text-xs text-slate-400">สัปดาห์ที่ <span class="display-current-week">24</span> (จากเริ่มต้น <span id="display-start-weight">90</span> <span class="unit-text">kg</span>)</span>
+          </div>
+          
+          <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+            <div id="wegovy-progress-bar" class="bg-emerald-500 h-1.5 rounded-full custom-transition" style="width: 100%"></div>
+          </div>
+          
+          <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-emerald-50 rounded-full filter blur-lg opacity-60"></div>
+        </div>
+
+        <!-- แดชบอร์ดผลลัพธ์ Mounjaro -->
+        <div class="bg-white rounded-2xl border border-indigo-100 shadow-sm p-5 border-l-4 border-l-indigo-500 relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <span class="text-xs font-bold text-indigo-800 uppercase tracking-wider block">ผลจำลองด้วย Mounjaro® (15mg)</span>
+            <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-1.5 py-0.5 rounded">ราคาตลาดอ้างอิง</span>
+          </div>
+          <div class="flex items-baseline gap-1 mt-2">
+            <span id="display-mounjaro-weight" class="text-3xl font-black text-slate-900">70.0</span>
+            <span class="text-sm font-semibold text-slate-500 uppercase unit-text">kg</span>
+          </div>
+
+          <div class="flex items-center gap-2 mt-1">
+            <span id="display-mounjaro-lost" class="text-sm font-bold text-indigo-600">-20.0 kg (-18.0%)</span>
+            <span class="text-xs text-slate-400">สัปดาห์ที่ <span class="display-current-week">24</span></span>
+          </div>
+
+          <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+            <div id="mounjaro-progress-bar" class="bg-indigo-600 h-1.5 rounded-full custom-transition" style="width: 100%"></div>
+          </div>
+
+          <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-indigo-50 rounded-full filter blur-lg opacity-60"></div>
+        </div>
+
+      </div>
+
+      <!-- เครื่องเลื่อนจำลองความคืบหน้าเวลาแบบไดนามิกในรูปแถบสไลเดอร์ -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 md:p-6">
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <span>🕒 แผงควบคุมเวลาจำลองแบบคู่ขนาน (Wegovy vs Mounjaro Timeline)</span>
+        </h3>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex flex-col md:flex-row items-center gap-4">
+          <button
+            id="play-pause-btn"
+            class="flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm shadow-sm transition self-stretch md:self-auto justify-center bg-indigo-600 text-white hover:bg-indigo-700"
+          >
+            <!-- เล่นภาพรวม -->
+            <svg id="play-icon" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span id="play-btn-text">เล่นจำลองเวลาอัตโนมัติ</span>
+          </button>
+
+          <div class="flex-1 w-full flex items-center gap-3">
+            <input 
+              type="range" 
+              id="week-slider"
+              min="0" 
+              max="72" 
+              value="24"
+              class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none"
+            />
+            <span class="text-sm font-extrabold text-indigo-800 bg-indigo-100/70 px-3 py-1.5 rounded-lg border border-indigo-200 min-w-[105px] text-center">
+              สัปดาห์ที่ <span class="display-current-week">24</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- แผนภูมิเส้น SVG แสดงผลการทับซ้อนเปรียบเทียบ STEP-1 vs SURMOUNT-1 -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 md:p-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">
+              แผนภูมิตารางเปรียบเทียบประสิทธิภาพลดน้ำหนัก (%)
+            </h3>
+            <p class="text-xs text-slate-500">
+              คลิกที่ตำแหน่งใดๆ บนพื้นที่ชาร์ตเพื่อวิเคราะห์ผลลัพธ์รายสัปดาห์ได้ทันที
+            </p>
+          </div>
+
+          <!-- สัญญลักษณ์สีสายกราฟ -->
+          <div class="flex flex-wrap gap-x-4 gap-y-1.5">
+            <div class="flex items-center gap-1.5 text-xs font-semibold">
+              <span class="w-3.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+              <span class="text-slate-600">Placebo (-2.4%)</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs font-semibold">
+              <span class="w-3.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+              <span class="text-slate-600">Wegovy® 2.4mg (-21.0%)</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs font-semibold">
+              <span class="w-3.5 h-1.5 rounded-full bg-indigo-600 inline-block"></span>
+              <span class="text-slate-600">Mounjaro® 15mg (-22.5%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- หน้าต่างวาดกราฟ SVG -->
+        <div class="relative h-[250px] w-full mt-4 select-none">
+          
+          <!-- เส้นกริดเปอร์เซ็นต์สะสม -->
+          <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+            <div class="w-full flex items-center gap-2 h-0"><span class="text-[10px] text-slate-400 font-semibold w-8 text-right">0%</span><div class="flex-1 border-t border-slate-100"></div></div>
+            <div class="w-full flex items-center gap-2 h-0"><span class="text-[10px] text-slate-400 font-semibold w-8 text-right">-5%</span><div class="flex-1 border-t border-slate-100"></div></div>
+            <div class="w-full flex items-center gap-2 h-0"><span class="text-[10px] text-slate-400 font-semibold w-8 text-right">-10%</span><div class="flex-1 border-t border-slate-100"></div></div>
+            <div class="w-full flex items-center gap-2 h-0"><span class="text-[10px] text-slate-400 font-semibold w-8 text-right">-15%</span><div class="flex-1 border-t border-slate-100"></div></div>
+            <div class="w-full flex items-center gap-2 h-0"><span class="text-[10px] text-slate-400 font-semibold w-8 text-right">-20%</span><div class="flex-1 border-t border-slate-100"></div></div>
+            <div class="w-full flex items-center gap-2 h-0"><span class="text-[10px] text-slate-400 font-semibold w-8 text-right">-25%</span><div class="flex-1 border-t border-slate-100"></div></div>
+          </div>
+
+          <!-- SVG Canvas -->
+          <svg 
+            id="chart-svg"
+            class="absolute inset-0 w-full h-full pt-1.5 pb-2 pl-10 pr-4 cursor-pointer"
+            viewBox="0 0 100 100" 
+            preserveAspectRatio="none"
+          >
+            <!-- เส้นชาร์ต Placebo (เหลือง) -->
+            <path id="path-placebo" fill="none" stroke="#F59E0B" stroke-width="1.2" stroke-opacity="0.6" class="custom-transition" d=""></path>
+
+            <!-- เส้นชาร์ต Wegovy 2.4mg (เขียว) -->
+            <path id="path-wegovy" fill="none" stroke="#10B981" stroke-width="2" stroke-opacity="0.8" class="custom-transition" d=""></path>
+
+            <!-- เส้นชาร์ต Mounjaro 15mg (ม่วงคราม) -->
+            <path id="path-mounjaro" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-opacity="1" class="custom-transition" d=""></path>
+
+            <!-- เส้นประไทม์ไลน์สแกนแนวตั้ง -->
+            <line id="indicator-line" x1="33.3" y1="0" x2="33.3" y2="100" stroke="#6366F1" stroke-width="0.5" stroke-dasharray="1.5 1.5"></line>
+
+            <!-- จุดจำลองตำแหน่งของเข็มยา Wegovy และ Mounjaro -->
+            <circle id="wegovy-circle" cx="33.3" cy="72" r="2.5" fill="#10B981" stroke="#FFF" stroke-width="0.7"></circle>
+            <circle id="mounjaro-circle" cx="33.3" cy="72" r="2.5" fill="#4F46E5" stroke="#FFF" stroke-width="0.7"></circle>
+          </svg>
+
+          <!-- ตัวเลขระบุแกนแนวนอนสัปดาห์ -->
+          <div class="absolute bottom-0 inset-x-0 pl-10 pr-4 flex justify-between pointer-events-none text-[10px] text-slate-400 font-bold">
+            <span>สัปดาห์ 0</span>
+            <span>สัปดาห์ 16</span>
+            <span>สัปดาห์ 32</span>
+            <span>สัปดาห์ 48</span>
+            <span>สัปดาห์ 64</span>
+            <span>สัปดาห์ 72</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- บอร์ดเปรียบเทียบค่าใช้จ่ายและความคุ้มทุน (Cost & Value Comparison) อ้างอิงราคาโปรแกรมโรงพยาบาลจริง -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 md:p-6 space-y-6">
+        <div class="border-b border-slate-100 pb-3">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <!-- ไอคอนเงิน Cash SVG -->
+            <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            การเปรียบเทียบค่าใช้จ่ายและความคุ้มค่า (Hospital Program Pricing vs Market Reference)
+          </h3>
+          <p class="text-xs text-slate-500 mt-1">วิเคราะห์งบประมาณตามราคาจริงของโรงพยาบาลสำหรับ Wegovy® เปรียบเทียบกับราคาตลาดภายนอกสำหรับ Mounjaro®</p>
+        </div>
+
+        <!-- กริดเปรียบเทียบ: ตารางราคา และ เครื่องคำนวณสะสม -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- ตารางราคายาคลินิก SafeSlim & Hospital -->
+          <div class="space-y-3">
+            <span class="text-xs font-black text-slate-700 uppercase block tracking-wider">📋 โครงสร้างราคาประกอบการพิจารณา</span>
+            
+            <div class="space-y-3.5">
+              <!-- ฝั่ง Wegovy โรงพยาบาล -->
+              <div class="p-3 rounded-xl border border-emerald-100 bg-emerald-50/10 space-y-2">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-emerald-800">Wegovy® (ราคาโรงพยาบาลรวมแพทย์และบริการ)</span>
+                  <span class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">ยาแท้โรงพยาบาล</span>
+                </div>
+                <div class="grid grid-cols-2 text-[10px] text-slate-600 gap-1.5">
+                  <div class="bg-white p-2 rounded border border-slate-100">
+                    <span class="text-slate-400 block font-semibold">โดสเริ่มต้น (0.25 mg)</span>
+                    <strong class="text-slate-800 text-xs">16,500.- / เข็ม</strong>
+                  </div>
+                  <div class="bg-white p-2 rounded border border-slate-100">
+                    <span class="text-slate-400 block font-semibold">ปรับระดับ (0.5 mg)</span>
+                    <strong class="text-slate-800 text-xs">17,500.- / เข็ม</strong>
+                  </div>
+                  <div class="bg-white p-2 rounded border border-slate-100">
+                    <span class="text-slate-400 block font-semibold">สร้างโมเมนตัม (1.0 mg)</span>
+                    <strong class="text-slate-800 text-xs">18,500.- / เข็ม</strong>
+                  </div>
+                  <div class="bg-white p-2 rounded border border-slate-100">
+                    <span class="text-slate-400 block font-semibold">ประคองอาการ (1.7 mg)</span>
+                    <strong class="text-slate-800 text-xs">20,500.- / เข็ม</strong>
+                  </div>
+                </div>
+                <div class="text-[10px] text-emerald-800 font-bold bg-emerald-100/50 p-2 rounded text-center space-y-1">
+                  <div>🌟 ระดับรักษาสูงสุด (2.4 mg): 23,500.- / เข็ม</div>
+                  <div class="text-emerald-900 border-t border-emerald-200/50 pt-1 mt-1 font-black">
+                    🔥 แพ็กเกจสุดคุ้ม 3 เข็ม (2.4 mg): 65,000.- (เฉลี่ย 21,667.- / เข็ม)
+                  </div>
+                </div>
+              </div>
+
+              <!-- ฝั่ง Mounjaro ตลาดนอก -->
+              <div class="p-3 rounded-xl border border-indigo-100 bg-indigo-50/10 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-indigo-800">Mounjaro® (ราคาตลาดภายนอกสำหรับอ้างอิง)</span>
+                  <span class="text-[9px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded">ยังไม่มีบริการที่ รพ.</span>
+                </div>
+                <div class="grid grid-cols-3 text-[11px] text-slate-600 gap-1 text-center">
+                  <div class="bg-white p-1 rounded border border-slate-100"><strong class="text-slate-800 block">1 Dose</strong> 1,999.-</div>
+                  <div class="bg-white p-1 rounded border border-slate-100"><strong class="text-slate-800 block">4 Doses</strong> 7,990.-</div>
+                  <div class="bg-white p-1 rounded border border-slate-100"><strong class="text-slate-800 block">8 Doses</strong> 15,900.-</div>
+                </div>
+                <div class="text-[10px] text-indigo-700 font-semibold bg-indigo-100/50 p-1.5 rounded text-center">
+                  💡 ราคาเหมาแท่งอ้างอิง: 20 mg: 18,900.- | 40 mg: 29,900.-
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- กล่องสรุปความคุ้มค่าสะสมสำหรับ สัปดาห์ปัจจุบันที่เลือก -->
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="text-xs font-black text-slate-700 uppercase block tracking-wider">💰 ค่าใช้จ่ายสะสมวิเคราะห์ตามเวลาที่ระบุ</span>
+              
+              <div class="flex items-center justify-between text-xs border-b border-slate-100 pb-2">
+                <span class="text-slate-500 font-medium">สัปดาห์ที่จำลองรักษา:</span>
+                <span class="font-extrabold text-indigo-900 text-sm">สัปดาห์ที่ <span class="display-current-week">24</span></span>
+              </div>
+
+              <div class="flex items-center justify-between text-xs border-b border-slate-100 pb-2">
+                <span class="text-slate-500 font-medium">จำนวนเข็ม (Pens) ที่ต้องใช้สะสม:</span>
+                <span class="font-extrabold text-slate-900 text-sm"><span id="doses-needed-count">6</span> เข็ม (6 เดือน)</span>
+              </div>
+
+              <!-- ค่าใช้จ่ายสะสมสำหรับ Wegovy โรงพยาบาล -->
+              <div class="space-y-1">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-emerald-800">งบรวม Wegovy® โรงพยาบาล:</span>
+                  <span class="font-black text-slate-900 text-sm"><span id="wegovy-est-cost">120,000</span> บาท</span>
+                </div>
+                <div class="flex justify-between items-center text-[10px] text-slate-500">
+                  <span>เฉลี่ยต่อ 1 kg ที่ลดได้:</span>
+                  <span class="font-bold text-emerald-700"><span id="wegovy-cost-per-kg">1,184</span> บาท / kg</span>
+                </div>
+              </div>
+
+              <!-- ค่าใช้จ่ายสะสมสำหรับ Mounjaro ตลาดนอก -->
+              <div class="space-y-1 pt-1 border-t border-slate-100/80">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-indigo-800">งบประมาณตลาดรวม Mounjaro®:</span>
+                  <span class="font-black text-slate-900 text-sm"><span id="mounjaro-est-cost">156,090</span> บาท</span>
+                </div>
+                <div class="flex justify-between items-center text-[10px] text-slate-500">
+                  <span>เฉลี่ยต่อ 1 kg ที่ลดได้:</span>
+                  <span class="font-bold text-indigo-700"><span id="mounjaro-cost-per-kg">2,385</span> บาท / kg</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-[10px] text-rose-600 font-semibold p-2 bg-rose-50 rounded border border-rose-100">
+              * Wegovy® โรงพยาบาลเป็นราคาการรักษาระบบมาตรฐานรวมแพทย์และยาแท้ควบคุมอุณหภูมิ ส่วน Mounjaro® เป็นเพียงราคาเสนออ้างอิงตลาดนอกระบบ
+            </div>
+          </div>
+
+        </div>
+
+        <!-- บทวิเคราะห์การช่วยผู้ป่วยตัดสินใจ -->
+        <div class="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 text-xs text-slate-700 leading-relaxed space-y-2">
+          <strong class="font-bold text-indigo-950 flex items-center gap-1">
+            🩺 ข้อแนะนำในการตัดสินใจสำหรับผู้ป่วยโรงพยาบาลของเรา
+          </strong>
+          <ul class="space-y-1.5 list-disc pl-4 text-slate-600">
+            <li>
+              <strong>ความคุ้มค่าด้านสิทธิประโยชน์และความปลอดภัย (Certified Safety Over Cost):</strong> แม้ราคาตลาดอ้างอิงภายนอกของ Mounjaro® อาจดูต่ำกว่าเนื่องจากราคาเสนอที่ยังไม่เข้าระบบ แต่การรับรักษาด้วย **Wegovy® ของโรงพยาบาลเป็นการดูแลภายใต้มาตรฐานแพทย์อย่างเป็นทางการ** ราคารวมสิทธิ์การตรวจติดตามประเมินผลข้างเคียง และมั่นใจได้เต็มร้อยในเรื่องการควบคุมอุณหภูมิของยา (Cold Chain) ซึ่งสำคัญมากต่อความเสถียรของสารเปปไทด์ Semaglutide
+            </li>
+            <li>
+              <strong>เป้าหมายในการรักษาที่เหมาะสม (Tailored Efficacy Goals):</strong> สำหรับคนไข้ส่วนใหญ่ อัตราการลดน้ำหนักเฉลี่ย **17.5% - 21% ด้วย Wegovy® ภายใต้โปรแกรมโรงพยาบาล** ถือว่าเพียงพอและปลอดภัยต่อกล้ามเนื้ออย่างเหมาะสมยิ่งยวดเมื่อควบคู่กับ **Weight Training** โดยไม่ต้องเผชิญความเสี่ยงเรื่องยาปลอมหรือการไม่มีผู้เชี่ยวชาญกำกับดูแลในการซื้อตลาดยานอกระบบ
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- บอร์ดรายละเอียดเทียบขนาดเข็มยา (Dose Escalation Pathway Comparison) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 md:p-6 space-y-4">
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+          <span>📈 ตารางเปรียบเทียบขั้นตอนการปรับโดสยา (Dosing Pathway Side-by-Side)</span>
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- ตาราง Wegovy -->
+          <div class="p-4 rounded-xl border border-emerald-100 bg-emerald-50/20 space-y-2">
+            <span class="text-xs font-black text-emerald-800 uppercase block">ตารางการปรับโดส Wegovy®</span>
+            <div id="wegovy-dose-steps" class="text-xs space-y-1.5">
+              <!-- ข้อมูลอัปเดตแบบไดนามิกจาก JS -->
+            </div>
+          </div>
+
+          <!-- ตาราง Mounjaro -->
+          <div class="p-4 rounded-xl border border-indigo-100 bg-indigo-50/20 space-y-2">
+            <span class="text-xs font-black text-indigo-800 uppercase block">ตารางการปรับโดส Mounjaro®</span>
+            <div id="mounjaro-dose-steps" class="text-xs space-y-1.5">
+              <!-- ข้อมูลอัปเดตแบบไดนามิกจาก JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- คู่มือเวทเทรนนิ่งเพื่อสุขภาพ (Muscle Sparing Weight Training Guide) สำคัญมากสำหรับผู้ใช้ยาลดน้ำหนักประสิทธิภาพสูง -->
+      <div class="bg-slate-900 text-white rounded-2xl shadow-md p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border border-slate-800">
+        <div>
+          <h4 class="text-md font-bold text-indigo-400 mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            ทำไมต้อง Weight Training ร่วมกับยาคุมน้ำหนัก?
+          </h4>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            การลดน้ำหนักอย่างรวดเร็วด้วยกลไกประสิทธิภาพสูงของ Wegovy® มักส่งผลเสียต่อร่างกายหากขาดการกระตุ้นกล้ามเนื้อ ร่างกายจะเลือกดึงสลายโปรตีนในเนื้อเยื่อมวลกล้ามเนื้อ (Skeletal Muscle) ออกไปเป็นพลังงานพร้อมไขมัน:
+          </p>
+          <ul class="space-y-2 text-xs text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">•</span>
+              <span><strong>ป้องกันระบบเผาผลาญล่ม (Metabolic Drop):</strong> การรักษากล้ามเนื้อช่วยให้ BMR คงที่ ไม่เกิดสภาวะโยโย่เมื่อสิ้นสุดโปรแกรมหยุดใช้ยา</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">•</span>
+              <span><strong>ลดปัญหาร่ายกายเหี่ยวย้วย (Anti-Skin Sagging):</strong> การฉีดไขมันลดลงเร็วแต่ผิวหดตัวไม่ทัน จะได้มวลกล้ามเนื้อเข้าไปประคองกระชับโครงร่าง ไม่หย่อนคล้อย</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">•</span>
+              <span><strong>ป้องกันภาวะสูญเสียความแข็งแรง (Sarcopenia):</strong> ยิ่งอายุเพิ่มขึ้น การรักษาความมั่นคง of ข้อต่อผ่านแรงต้านมีความสำคัญอันดับหนึ่ง</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-md font-bold text-indigo-400 mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            ตารางและเป้าหมายการฝึกแบบแรงต้าน (Resistance Plan)
+          </h4>
+          <p class="text-xs text-slate-300 leading-relaxed mb-3">
+            มุ่งเน้นการซ้อมแบบบอดี้เวทหรือการเล่นน้ำหนักอุปกรณ์อย่างน้อย 3 วันต่อสัปดาห์ (วันเว้นวัน):
+          </p>
+          
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3 bg-slate-800 rounded-xl border border-slate-700">
+              <span class="block font-bold text-emerald-400 mb-0.5">🏋️‍♂️ ท่าฝึกกลุ่มหลักมัดใหญ่ (Compound movements)</span>
+              <span class="block text-slate-300">
+                เล่นท่าสควอช (Squats) เพื่อกระตุ้นต้นขาและสะโพก, ท่าดันอก/วิดพื้น (Chest Press/Push-ups) และท่ายึดดึงแรงต้าน (Rows) ท่าละ 3 เซ็ต เซ็ตละ 8-12 ครั้ง
+              </span>
+            </div>
+            <div class="p-3 bg-slate-800 rounded-xl border border-slate-700">
+              <span class="block font-bold text-indigo-400 mb-0.5">🔄 การเพิ่มแรงต้านอย่างมีระดับ (Progressive Overload)</span>
+              <span class="block text-slate-300">
+                เมื่อร่างกายฟิตและเบาตัวขึ้น ให้ค่อยๆ ปรับระดับเพิ่มน้ำหนักอุปกรณ์ดัมเบล หรือควบคุมจังหวะเกร็งให้ช้าลง เพื่อเสริมการทำงานของโครงกล้ามเนื้ออย่างเต็มศักยภาพ
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ส่วนแสดงสิทธิ์ท้ายเพจ (Footer) -->
+  <footer class="bg-slate-100 border-t border-slate-200 mt-10">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+      <p>© 2026 ASDA Efficacy Comparison Tool. พัฒนาขึ้นโดยใช้ข้อมูลทางสถิติการทดลองทางคลินิกอย่างมีจริยธรรม</p>
+      <div class="flex gap-4 font-semibold">
+        <a href="https://onlinedoctor.asda.com/uk/wegovy-weight-loss-timeline-week-by-week.html" target="_blank" rel="noreferrer" class="hover:text-emerald-600 underline">
+          ข้อมูล Wegovy ดั้งเดิม
+        </a>
+        <span>•</span>
+        <a href="https://onlinedoctor.asda.com/uk/mounjaro-weight-loss-week-by-week.html" target="_blank" rel="noreferrer" class="hover:text-indigo-600 underline">
+          ข้อมูล Mounjaro ดั้งเดิม
+        </a>
+        <span>•</span>
+        <span class="text-slate-400">ห้ามใช้แทนการปรึกษาแพทย์แผนปัจจุบัน</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ตรรกะกระบวนการประมวลผลและการคำนวณกราฟแบบเรียลไทม์ (JavaScript) -->
+  <script>
+    // 1. ชุดข้อมูลทางสถิติการลดน้ำหนักแบบเปอร์เซ็นต์สะสมสัปดาห์ต่อสัปดาห์
+    const placeboData = [
+      { w: 0, p: 0 }, { w: 4, p: -0.8 }, { w: 8, p: -1.5 }, { w: 12, p: -2.0 },
+      { w: 16, p: -2.3 }, { w: 20, p: -2.8 }, { w: 24, p: -3.3 }, { w: 32, p: -3.8 },
+      { w: 40, p: -4.0 }, { w: 48, p: -4.0 }, { w: 56, p: -4.0 }, { w: 64, p: -3.9 }, { w: 72, p: -2.4 }
+    ];
+
+    const wegovyData = [
+      { w: 0, p: 0 }, { w: 4, p: -2.0 }, { w: 8, p: -4.0 }, { w: 12, p: -6.0 },
+      { w: 16, p: -8.0 }, { w: 20, p: -17.0 }, { w: 24, p: -18.2 }, { w: 32, p: -19.2 },
+      { w: 40, p: -19.8 }, { w: 48, p: -20.3 }, { w: 56, p: -20.6 }, { w: 64, p: -20.8 }, { w: 72, p: -21.0 } // ขนาดยาสูงสุด 7.2mg
+    ];
+
+    const mounjaroData = [
+      { w: 0, p: 0 }, { w: 4, p: -3.0 }, { w: 8, p: -6.0 }, { w: 12, p: -9.0 },
+      { w: 16, p: -12.0 }, { w: 20, p: -16.0 }, { w: 24, p: -18.0 }, { w: 32, p: -19.5 },
+      { w: 40, p: -20.5 }, { w: 48, p: -21.2 }, { w: 56, p: -21.8 }, { w: 64, p: -22.2 }, { w: 72, p: -22.5 } // ขนาดยาสูงสุด 15mg
+    ];
+
+    // 2. ตัวแปรเก็บสถานะ (State)
+    const state = {
+      unit: 'kg',
+      startWeight: 90,
+      targetWeight: 71,
+      currentWeek: 24,
+      isPlaying: false,
+      animationInterval: null
+    };
+
+    // 3. ฟังก์ชันการคำนวณหลักและ Interpolate เพื่อให้ความต่อเนื่องรายสัปดาห์
+    function getInterpolatedValue(week, dataset) {
+      if (week <= 0) return 0;
+      if (week >= 72) return dataset[dataset.length - 1].p;
+      
+      for (let i = 0; i < dataset.length - 1; i++) {
+        const p1 = dataset[i];
+        const p2 = dataset[i + 1];
+        if (week >= p1.w && week <= p2.w) {
+          const ratio = (week - p1.w) / (p2.w - p1.w);
+          return p1.p + ratio * (p2.p - p1.p);
+        }
+      }
+      return 0;
+    }
+
+    // ฟังก์ชันระบุขนาดปริมาณโดสยารายสัปดาห์ของ Wegovy และ Mounjaro
+    function getWegovyDoseAt(week) {
+      if (week <= 4) return "0.25 mg";
+      if (week <= 8) return "0.5 mg";
+      if (week <= 12) return "1.0 mg";
+      if (week <= 16) return "1.7 mg";
+      return "2.4 mg (ขนาดยาสูงสุด)";
+    }
+
+    function getMounjaroDoseAt(week) {
+      if (week <= 4) return "2.5 mg";
+      if (week <= 8) return "5.0 mg";
+      if (week <= 12) return "7.5 mg";
+      if (week <= 16) return "10.0 mg";
+      if (week <= 20) return "12.5 mg";
+      return "15.0 mg (ขนาดยาสูงสุด)";
+    }
+
+    // ฟังก์ชันแปลหน่วยน้ำหนัก
+    function convertWeight(val, from, to) {
+      if (!val) return 0;
+      let kgVal = val;
+      if (from === 'lbs') kgVal = val / 2.20462;
+      if (from === 'st') kgVal = val * 6.35029;
+      
+      if (to === 'kg') return parseFloat((kgVal).toFixed(1));
+      if (to === 'lbs') return parseFloat((kgVal * 2.20462).toFixed(1));
+      if (to === 'st') return parseFloat((kgVal / 6.35029).toFixed(1));
+      return val;
+    }
+
+    // แสดงรายละเอียดของหน่วยย่อยในวงเล็บ
+    function getSubDisplayValue(weightValue) {
+      if (state.unit === 'st') {
+        const kg = convertWeight(weightValue, 'st', 'kg');
+        const lbs = convertWeight(weightValue, 'st', 'lbs');
+        return `~ ${kg} kg / ${lbs} lbs`;
+      } else if (state.unit === 'lbs') {
+        const st = convertWeight(weightValue, 'lbs', 'st');
+        const kg = convertWeight(weightValue, 'lbs', 'kg');
+        return `~ ${st} st / ${kg} kg`;
+      } else {
+        const st = convertWeight(weightValue, 'kg', 'st');
+        const lbs = convertWeight(weightValue, 'kg', 'lbs');
+        return `~ ${st} st / ${lbs} lbs`;
+      }
+    }
+
+    // ระบุอินเด็กซ์ของช่วงสัปดาห์ในการทำ Milestone Glow
+    function getActiveMilestoneIndex() {
+      if (state.currentWeek <= 4) return 0;
+      if (state.currentWeek <= 8) return 1;
+      if (state.currentWeek <= 12) return 2;
+      if (state.currentWeek <= 16) return 3;
+      if (state.currentWeek <= 21) return 4;
+      return 5;
+    }
+
+    // ฟังก์ชันสำหรับคำนวณราคา Wegovy ตามโรงพยาบาลจริง (1 เข็มใช้ได้ 4 ครั้ง / 4 สัปดาห์)
+    function calculateWegovyCost(weeks) {
+      if (weeks <= 0) return 0;
+      let totalCost = 0;
+      const pensNeeded = Math.ceil(weeks / 4);
+
+      for (let pen = 1; pen <= pensNeeded; pen++) {
+        if (pen === 1) {
+          totalCost += 16500; // เดือน 1 โดส 0.25 mg
+        } else if (pen === 2) {
+          totalCost += 17500; // เดือน 2 โดส 0.5 mg
+        } else if (pen === 3) {
+          totalCost += 18500; // เดือน 3 โดส 1.0 mg
+        } else if (pen === 4) {
+          totalCost += 20500; // เดือน 4 โดส 1.7 mg
+        } else {
+          // ตั้งแต่เดือนที่ 5 เป็นต้นไป (โดสประคองรักษา 2.4 mg)
+          // สามารถซื้อเดี่ยวเข็มละ 23,500.- หรือจะซื้อแบบแพ็กเกจ 3 เข็ม 65,000.-
+          const remaining24Pens = pensNeeded - 4;
+          const packsOf3 = Math.floor(remaining24Pens / 3);
+          const singlePens = remaining24Pens % 3;
+          
+          // คำนวณหาจุดประหยัดที่สุดสำหรับคนไข้
+          const optCost1 = (packsOf3 * 65000) + (singlePens * 23500);
+          const optCost2 = (packsOf3 + 1) * 65000; // ในกรณีที่การซื้อแพ็กเกจเกินถูกกว่า
+
+          totalCost += Math.min(optCost1, optCost2);
+          break; // จบการคำนวณสะสม
+        }
+      }
+      return totalCost;
+    }
+
+    // ฟังก์ชันสำหรับคำนวณราคา Mounjaro (อิงตามการปรับโดสจริงรายเดือนจาก SafeSlim)
+    function calculateMounjaroCost(weeks) {
+      if (weeks <= 0) return 0;
+      let totalCost = 0;
+      const pensNeeded = Math.ceil(weeks / 4);
+
+      for (let pen = 1; pen <= pensNeeded; pen++) {
+        if (pen === 1) {
+          totalCost += 7990;  // เดือน 1 (2.5 mg x 4 = 10mg) -> 7,990.-
+        } else if (pen === 2) {
+          totalCost += 18900; // เดือน 2 (5.0 mg x 4 = 20mg) -> แบบเหมาแท่ง 20mg 18,900.-
+        } else if (pen === 3) {
+          totalCost += 24400; // เดือน 3 (7.5 mg x 4 = 30mg) -> ราคาตลาดประมาณการ 24,400.-
+        } else if (pen === 4) {
+          totalCost += 29900; // เดือน 4 (10.0 mg x 4 = 40mg) -> แบบเหมาแท่ง 40mg 29,900.-
+        } else if (pen === 5) {
+          totalCost += 34900; // เดือน 5 (12.5 mg x 4 = 50mg) -> ราคาตลาดประมาณการ 34,900.-
+        } else {
+          totalCost += 39900; // เดือน 6+ (15.0 mg x 4 = 60mg) -> ราคาตลาดประมาณการ 39,900.-
+        }
+      }
+      return totalCost;
+    }
+
+    // 4. การแสดงผล UI และการประมวลผลข้อความ (UI Rendering)
+    function updateUI() {
+      // เปอร์เซ็นต์การสูญเสียของ Wegovy และ Mounjaro
+      const wegovyPercent = getInterpolatedValue(state.currentWeek, wegovyData);
+      const mounjaroPercent = getInterpolatedValue(state.currentWeek, mounjaroData);
+
+      // คำนวณน้ำหนักปลายทางจำลอง
+      const estWegovyWeight = Math.max(0, state.startWeight * (1 + wegovyPercent / 100));
+      const estMounjaroWeight = Math.max(0, state.startWeight * (1 + mounjaroPercent / 100));
+
+      const wegovyLost = state.startWeight - estWegovyWeight;
+      const mounjaroLost = state.startWeight - estMounjaroWeight;
+
+      // รายงานผลใส่บอร์ด Wegovy
+      document.getElementById('display-wegovy-weight').textContent = estWegovyWeight.toFixed(1);
+      document.getElementById('display-wegovy-lost').textContent = `-${wegovyLost.toFixed(1)} ${state.unit} (${Math.abs(wegovyPercent).toFixed(1)}%)`;
+      
+      let wegovyProgress = 100;
+      if (state.startWeight > state.targetWeight) {
+        wegovyProgress = Math.min(100, Math.max(0, (wegovyLost / (state.startWeight - state.targetWeight)) * 100));
+      }
+      document.getElementById('wegovy-progress-bar').style.width = `${wegovyProgress}%`;
+
+      // รายงานผลใส่บอร์ด Mounjaro
+      document.getElementById('display-mounjaro-weight').textContent = estMounjaroWeight.toFixed(1);
+      document.getElementById('display-mounjaro-lost').textContent = `-${mounjaroLost.toFixed(1)} ${state.unit} (${Math.abs(mounjaroPercent).toFixed(1)}%)`;
+
+      let mounjaroProgress = 100;
+      if (state.startWeight > state.targetWeight) {
+        mounjaroProgress = Math.min(100, Math.max(0, (mounjaroLost / (state.startWeight - state.targetWeight)) * 100));
+      }
+      document.getElementById('mounjaro-progress-bar').style.width = `${mounjaroProgress}%`;
+
+      // อัปเดตตัวบอกหน่วยน้ำหนักทั่วไป (kg/lbs/st)
+      document.querySelectorAll('.unit-text').forEach(el => el.textContent = state.unit);
+      document.getElementById('display-start-weight').textContent = state.startWeight;
+
+      // อัปเดตหน่วยข้างใต้ในฟอร์มกรอก
+      document.getElementById('start-weight-sub').textContent = getSubDisplayValue(state.startWeight);
+      document.getElementById('target-weight-sub').textContent = getSubDisplayValue(state.targetWeight);
+
+      // สรุป % เป้าหมายที่ต้องการลดลงและเช็คคุณสมบัติความเป็นไปได้ทางคลินิก
+      const targetReductionPercent = state.startWeight > 0 ? ((state.startWeight - state.targetWeight) / state.startWeight) * 100 : 0;
+      document.getElementById('target-reduction-percent').textContent = targetReductionPercent > 0 ? `-${targetReductionPercent.toFixed(1)}%` : '0%';
+
+      const wegovyElig = document.getElementById('wegovy-eligibility');
+      const mounjaroElig = document.getElementById('mounjaro-eligibility');
+
+      if (targetReductionPercent > 0) {
+        if (targetReductionPercent <= 21.0) {
+          wegovyElig.textContent = "เป็นไปได้สูงมาก (เฉลี่ยลดได้ -21.0%)";
+          wegovyElig.className = "font-bold text-emerald-600";
+        } else {
+          wegovyElig.textContent = "ค่อนข้างยาก (ต้องการระเบียบวินัยและเวทสม่ำเสมอ)";
+          wegovyElig.className = "font-bold text-amber-600";
+        }
+
+        if (targetReductionPercent <= 22.5) {
+          mounjaroElig.textContent = "เป็นไปได้สูงมาก (เฉลี่ยลดได้ -22.5%)";
+          mounjaroElig.className = "font-bold text-indigo-600";
+        } else {
+          mounjaroElig.textContent = "ค่อนข้างยากมาก (เกินอัตราเฉลี่ยทางการแพทย์สูงสุด)";
+          mounjaroElig.className = "font-bold text-rose-600 font-extrabold";
+        }
+      } else {
+        wegovyElig.textContent = "รอตรวจสอบ...";
+        wegovyElig.className = "font-bold text-slate-400";
+        mounjaroElig.textContent = "รอตรวจสอบ...";
+        mounjaroElig.className = "font-bold text-slate-400";
+      }
+
+      // ไฮไลท์การ์ดช่วงสัปดาห์ (Milestones)
+      const milestoneIndex = getActiveMilestoneIndex();
+      document.querySelectorAll('#milestone-container > div').forEach((card, idx) => {
+        if (idx === milestoneIndex) {
+          card.className = "p-2.5 rounded-xl border transition-all duration-300 bg-indigo-600 text-white border-indigo-600 shadow-sm scale-105 font-bold";
+        } else {
+          card.className = "p-2.5 rounded-xl border transition-all duration-300 bg-slate-50 border-slate-200 text-slate-600";
+        }
+      });
+
+      // จัดการแท่งสไลเดอร์สัปดาห์
+      document.querySelectorAll('.display-current-week').forEach(el => el.textContent = state.currentWeek);
+      document.getElementById('week-slider').value = state.currentWeek;
+
+      // คำนวณราคาและประสิทธิภาพต่อน้ำหนักตัวที่ลดได้ (Cost-effectiveness)
+      const pensNeeded = Math.ceil(state.currentWeek / 4);
+      document.getElementById('doses-needed-count').textContent = pensNeeded;
+
+      const wegovyCost = calculateWegovyCost(state.currentWeek);
+      const mounjaroCost = calculateMounjaroCost(state.currentWeek);
+
+      document.getElementById('wegovy-est-cost').textContent = wegovyCost.toLocaleString();
+      document.getElementById('mounjaro-est-cost').textContent = mounjaroCost.toLocaleString();
+
+      // ค่าเฉลี่ยต่อหน่วยลดน้ำหนักที่แท้จริง
+      const wegovyCostPerKg = wegovyLost > 0 ? (wegovyCost / wegovyLost).toLocaleString(undefined, {maximumFractionDigits: 0}) : '0';
+      const mounjaroCostPerKg = mounjaroLost > 0 ? (mounjaroCost / mounjaroLost).toLocaleString(undefined, {maximumFractionDigits: 0}) : '0';
+
+      document.getElementById('wegovy-cost-per-kg').textContent = wegovyCostPerKg;
+      document.getElementById('mounjaro-cost-per-kg').textContent = mounjaroCostPerKg;
+
+      // เรนเดอร์แผนภูมิโดสยาเปรียบเทียบในปัจจุบัน
+      renderDoseStepsTable();
+
+      // เรนเดอร์ขีดสแกนกราฟเส้น SVG
+      drawSvgLines();
+    }
+
+    // ฟังก์ชันสร้างความแตกต่างของตารางขั้นตอนยาเดือนต่อเดือน
+    function renderDoseStepsTable() {
+      const wegovySteps = [
+        { label: "เดือนที่ 1 (สัปดาห์ 1-4)", val: "0.25 mg" },
+        { label: "เดือนที่ 2 (สัปดาห์ 5-8)", val: "0.50 mg" },
+        { label: "เดือนที่ 3 (สัปดาห์ 9-12)", val: "1.00 mg" },
+        { label: "เดือนที่ 4 (สัปดาห์ 13-16)", val: "1.70 mg" },
+        { label: "เดือนที่ 5+ (สัปดาห์ 17+)", val: "2.40 mg" },
+      ];
+
+      const mounjaroSteps = [
+        { label: "เดือนที่ 1 (สัปดาห์ 1-4)", val: "2.50 mg" },
+        { label: "เดือนที่ 2 (สัปดาห์ 5-8)", val: "5.00 mg" },
+        { label: "เดือนที่ 3 (สัปดาห์ 9-12)", val: "7.50 mg" },
+        { label: "เดือนที่ 4 (สัปดาห์ 13-16)", val: "10.0 mg" },
+        { label: "เดือนที่ 5 (สัปดาห์ 17-20)", val: "12.5 mg" },
+        { label: "เดือนที่ 6+ (สัปดาห์ 21+)", val: "15.0 mg" },
+      ];
+
+      const currentWegovyDose = getWegovyDoseAt(state.currentWeek);
+      const currentMounjaroDose = getMounjaroDoseAt(state.currentWeek);
+
+      const renderList = (elId, steps, activeDoseText) => {
+        const container = document.getElementById(elId);
+        container.innerHTML = steps.map(step => {
+          // หากโดสตรงกับสัปดาห์ปัจจุบันให้ทำขอบเด่น
+          const isActive = activeDoseText.includes(step.val.split(" ")[0]);
+          return `
+            <div class="flex items-center justify-between p-2 rounded-lg ${isActive ? 'bg-white shadow border border-slate-300 font-extrabold scale-102 text-slate-900' : 'opacity-65 text-slate-600'} transition-all duration-200">
+              <span>${step.label}</span>
+              <span class="px-2 py-0.5 rounded text-[11px] ${isActive ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-800'}">${step.val}</span>
+            </div>
+          `;
+        }).join('');
+      };
+
+      renderList('wegovy-dose-steps', wegovySteps, currentWegovyDose);
+      renderList('mounjaro-dose-steps', mounjaroSteps, currentMounjaroDose);
+    }
+
+    // 5. คำนวณเส้นกราฟแบบทับซ้อนและเรนเดอร์ลงใน SVG
+    function generateSvgPath(dataset) {
+      return dataset.map((pt, index) => {
+        const x = (pt.w / 72) * 100;
+        const y = (Math.abs(pt.p) / 25) * 100; // 0-25% คือเพดานความสูง
+        return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
+      }).join(' ');
+    }
+
+    function drawSvgLines() {
+      document.getElementById('path-placebo').setAttribute('d', generateSvgPath(placeboData));
+      document.getElementById('path-wegovy').setAttribute('d', generateSvgPath(wegovyData));
+      document.getElementById('path-mounjaro').setAttribute('d', generateSvgPath(mounjaroData));
+
+      // ประมวลตำแหน่ง Indicator ขีดเวลาสแกนและวงกลมทั้งคู่
+      const circleX = (state.currentWeek / 72) * 100;
+      
+      const wegovyPercent = getInterpolatedValue(state.currentWeek, wegovyData);
+      const mounjaroPercent = getInterpolatedValue(state.currentWeek, mounjaroData);
+
+      const wegovyCircleY = (Math.abs(wegovyPercent) / 25) * 100;
+      const mounjaroCircleY = (Math.abs(mounjaroPercent) / 25) * 100;
+
+      // จัดตั้งแกนประแนวดิ่ง
+      const line = document.getElementById('indicator-line');
+      line.setAttribute('x1', circleX);
+      line.setAttribute('x2', circleX);
+
+      // จัดตั้งวงกลมส้มผัสทั้งสองตัว
+      const wCircle = document.getElementById('wegovy-circle');
+      wCircle.setAttribute('cx', circleX);
+      wCircle.setAttribute('cy', wegovyCircleY);
+
+      const mCircle = document.getElementById('mounjaro-circle');
+      mCircle.setAttribute('cx', circleX);
+      mCircle.setAttribute('cy', mounjaroCircleY);
+    }
+
+    // 6. เหตุการณ์และปุ่มควบคุมหลัก (Event Listeners)
+    const startInput = document.getElementById('start-weight-input');
+    const targetInput = document.getElementById('target-weight-input');
+
+    startInput.addEventListener('input', (e) => {
+      state.startWeight = Math.max(0, parseFloat(e.target.value) || 0);
+      updateUI();
+    });
+
+    targetInput.addEventListener('input', (e) => {
+      state.targetWeight = Math.max(0, parseFloat(e.target.value) || 0);
+      updateUI();
+    });
+
+    // ปุ่มแนะนําเป้าหมาย Wegovy (-21.0%)
+    document.getElementById('recommend-wegovy-btn').addEventListener('click', () => {
+      const recommended = parseFloat((state.startWeight * 0.79).toFixed(1));
+      state.targetWeight = recommended;
+      targetInput.value = recommended;
+      updateUI();
+    });
+
+    // ปุ่มแนะนําเป้าหมาย Mounjaro (-22.5%)
+    document.getElementById('recommend-mounjaro-btn').addEventListener('click', () => {
+      const recommended = parseFloat((state.startWeight * 0.775).toFixed(1));
+      state.targetWeight = recommended;
+      targetInput.value = recommended;
+      updateUI();
+    });
+
+    // ฟังก์ชันการตั้งค่าหน่วยน้ำหนัก
+    function setupUnitBtn(btnId, targetUnit) {
+      document.getElementById(btnId).addEventListener('click', () => {
+        if (state.unit === targetUnit) return;
+        
+        const convertedStart = convertWeight(state.startWeight, state.unit, targetUnit);
+        const convertedTarget = convertWeight(state.targetWeight, state.unit, targetUnit);
+        
+        state.startWeight = convertedStart;
+        state.targetWeight = convertedTarget;
+        state.unit = targetUnit;
+
+        startInput.value = convertedStart;
+        targetInput.value = convertedTarget;
+
+        // สลับไฮไลท์ปุ่ม
+        document.querySelectorAll('[id^="unit-"]').forEach(btn => {
+          btn.className = "flex-1 md:flex-none px-4 py-2 text-xs font-bold rounded-lg transition uppercase text-slate-300 hover:bg-slate-800/50";
+        });
+        document.getElementById(btnId).className = "flex-1 md:flex-none px-4 py-2 text-xs font-bold rounded-lg transition uppercase bg-indigo-600 text-white shadow-sm";
+
+        updateUI();
+      });
+    }
+    setupUnitBtn('unit-kg-btn', 'kg');
+    setupUnitBtn('unit-lbs-btn', 'lbs');
+    setupUnitBtn('unit-st-btn', 'st');
+
+    // เลื่อนแถบควบคุมเวลาสัปดาห์ด้วยมือ
+    const slider = document.getElementById('week-slider');
+    slider.addEventListener('input', (e) => {
+      state.currentWeek = parseInt(e.target.value);
+      stopSimulation();
+      updateUI();
+    });
+
+    // ปุ่มเล่นจำลองอัตโนมัติ (Play / Pause Simulation)
+    const playBtn = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const playBtnText = document.getElementById('play-btn-text');
+
+    playBtn.addEventListener('click', () => {
+      if (state.isPlaying) {
+        stopSimulation();
+      } else {
+        startSimulation();
+      }
+    });
+
+    function startSimulation() {
+      state.isPlaying = true;
+      playBtn.className = "flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm shadow-sm transition self-stretch md:self-auto justify-center bg-rose-500 text-white hover:bg-rose-600";
+      playBtnText.textContent = "หยุดจำลองเวลา";
+      
+      // อัปเดตสัญลักษณ์เป็น Pause
+      playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />';
+
+      if (state.currentWeek >= 72) {
+        state.currentWeek = 0;
+      }
+
+      state.animationInterval = setInterval(() => {
+        state.currentWeek += 1;
+        if (state.currentWeek >= 72) {
+          state.currentWeek = 72;
+          stopSimulation();
+        }
+        updateUI();
+      }, 150);
+    }
+
+    function stopSimulation() {
+      state.isPlaying = false;
+      playBtn.className = "flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm shadow-sm transition self-stretch md:self-auto justify-center bg-indigo-600 text-white hover:bg-indigo-700";
+      playBtnText.textContent = "เล่นจำลองเวลาอัตโนมัติ";
+      
+      // อัปเดตกลับเป็นสัญลักษณ์ Play
+      playIcon.innerHTML = '<path d="M8 5v14l11-7z" />';
+
+      if (state.animationInterval) {
+        clearInterval(state.animationInterval);
+      }
+    }
+
+    // คลิกสัมผัสจุดใด ๆ บนกราฟเพื่อสแกนระยะเวลา
+    const chartSvg = document.getElementById('chart-svg');
+    chartSvg.addEventListener('click', (e) => {
+      const rect = chartSvg.getBoundingClientRect();
+      const paddingLeft = 40; // pl-10 (40px)
+      const paddingRight = 16; // pr-4 (16px)
+
+      const clickX = e.clientX - rect.left - paddingLeft;
+      const activeWidth = rect.width - paddingLeft - paddingRight;
+      const relativeX = Math.max(0, Math.min(1, clickX / activeWidth));
+
+      state.currentWeek = Math.round(relativeX * 72);
+      stopSimulation();
+      updateUI();
+    });
+
+    // เริ่มทำงานเมื่อเปิดหน้าเบราว์เซอร์ครั้งแรก
+    updateUI();
+  </script>
+</body>
+</html>
